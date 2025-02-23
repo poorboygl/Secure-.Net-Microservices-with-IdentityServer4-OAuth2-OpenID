@@ -1,1 +1,21 @@
 https://github.com/aspnetrun/run-aspnet-identityserver4
+
+git remote -v # check git host an
+
+git remote add [NewBrachName] [Link] #fetch to my git
+
+git fetch [NewBrachName]
+
+git merge [NewBrachName]/main
+
+phim ESC+q
+
+pullRequest
+
+https://www.youtube.com/@TITVvn/videos
+
+jwt.io
+
+
+
+
