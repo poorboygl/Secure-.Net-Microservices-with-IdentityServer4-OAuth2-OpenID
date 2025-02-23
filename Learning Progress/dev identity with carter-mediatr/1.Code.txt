@@ -1,0 +1,26 @@
+using Carter;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+using Movies.API.Features.Identity;
+
+namespace Movies.API.Endpoints
+{
+    public class IdentityModule : ICarterModule
+    {
+        public void AddRoutes(IEndpointRouteBuilder app)
+        {
+            var group = app.MapGroup("/api/identity")
+                           .RequireAuthorization(); // Yêu cầu xác thực
+
+            group.MapGet("/", async (IMediator mediator) =>
+            {
+                var claims = await mediator.Send(new GetUserClaimsQuery());
+                return Results.Json(claims);
+            })
+            .WithName("GetUserClaims")
+            .WithOpenApi();
+        }
+    }
+}

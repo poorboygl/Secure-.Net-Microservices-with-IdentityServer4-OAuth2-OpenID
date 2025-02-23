@@ -1,0 +1,34 @@
+using MediatR;
+using System.Security.Claims;
+
+namespace Movies.API.Features.Identity
+{
+    public class GetUserClaimsQuery : IRequest<IEnumerable<UserClaimDto>> { }
+
+    public class UserClaimDto
+    {
+        public string Type { get; set; } = string.Empty;
+        public string Value { get; set; } = string.Empty;
+    }
+
+    public class GetUserClaimsHandler : IRequestHandler<GetUserClaimsQuery, IEnumerable<UserClaimDto>>
+    {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public GetUserClaimsHandler(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        public Task<IEnumerable<UserClaimDto>> Handle(GetUserClaimsQuery request, CancellationToken cancellationToken)
+        {
+            var user = _httpContextAccessor.HttpContext?.User;
+            if (user == null)
+                return Task.FromResult<IEnumerable<UserClaimDto>>(Array.Empty<UserClaimDto>());
+
+            var claims = user.Claims.Select(c => new UserClaimDto { Type = c.Type, Value = c.Value });
+
+            return Task.FromResult(claims);
+        }
+    }
+}

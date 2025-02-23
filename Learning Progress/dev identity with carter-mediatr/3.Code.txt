@@ -1,0 +1,19 @@
+using Carter;
+using MediatR;
+using Movies.API.Features.Identity;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication().AddJwtBearer(); // Thêm xác thực JWT nếu cần
+builder.Services.AddAuthorization();
+builder.Services.AddHttpContextAccessor(); // Để inject IHttpContextAccessor
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<GetUserClaimsQuery>());
+builder.Services.AddCarter(); // Đăng ký Carter
+
+var app = builder.Build();
+
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapCarter(); // Kích hoạt Carter
+
+app.Run();
