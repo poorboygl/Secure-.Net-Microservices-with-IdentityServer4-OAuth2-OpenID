@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Movies.API.Models
+namespace BuildingBlock.Models
 {
     public class Movie
     {
