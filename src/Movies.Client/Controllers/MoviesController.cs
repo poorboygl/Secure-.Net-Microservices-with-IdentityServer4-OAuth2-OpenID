@@ -1,10 +1,12 @@
 ﻿using System.Threading.Tasks;
 using BuildingBlock.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Movies.Client.ApiServices;
 
 namespace Movies.Client.Controllers
 {
+    [Authorize]
     public class MoviesController : Controller
     {
         private readonly IMovieApiService _movieApiService;
