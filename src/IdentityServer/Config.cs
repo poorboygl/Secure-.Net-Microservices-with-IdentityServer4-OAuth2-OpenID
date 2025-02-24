@@ -44,10 +44,10 @@ namespace IdentityServer
                        {
                            IdentityServerConstants.StandardScopes.OpenId,
                            IdentityServerConstants.StandardScopes.Profile,
-                           //IdentityServerConstants.StandardScopes.Address,
-                           //IdentityServerConstants.StandardScopes.Email,
-                           //"movieAPI",
-                           //"roles"
+                           IdentityServerConstants.StandardScopes.Address,
+                           IdentityServerConstants.StandardScopes.Email,
+                           "movieAPI",
+                           "roles"
                        }
                    }
             };
@@ -69,12 +69,12 @@ namespace IdentityServer
           {
               new IdentityResources.OpenId(),
               new IdentityResources.Profile(),
-              //new IdentityResources.Address(),
-              //new IdentityResources.Email(),
-              //new IdentityResource(
-              //      "roles",
-              //      "Your role(s)",
-              //      new List<string>() { "role" })
+              new IdentityResources.Address(),
+              new IdentityResources.Email(),
+              new IdentityResource(
+                    "roles",
+                    "Your role(s)",
+                    new List<string>() { "role" })
           };
 
         public static List<TestUser> TestUsers =>

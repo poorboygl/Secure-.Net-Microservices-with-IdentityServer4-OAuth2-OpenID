@@ -1,5 +1,6 @@
 ﻿using System;
-using IdentityModel.Client;
+using IdentityModel;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Movies.Client.ApiServices;
 using Movies.Client.HttpHandlers;
@@ -43,28 +45,28 @@ namespace Movies.Client
                     options.ClientSecret = "secret";
                     options.ResponseType = "code";
 
-                    options.Scope.Add("openid");
-                    options.Scope.Add("profile");
-                    //options.Scope.Add("address");
-                    //options.Scope.Add("email");
-                    //options.Scope.Add("roles");
+                    //options.Scope.Add("openid");
+                    //options.Scope.Add("profile");
+                    options.Scope.Add("address");
+                    options.Scope.Add("email");
+                    options.Scope.Add("roles");
 
                     //options.ClaimActions.DeleteClaim("sid");
                     //options.ClaimActions.DeleteClaim("idp");
                     //options.ClaimActions.DeleteClaim("s_hash");
                     //options.ClaimActions.DeleteClaim("auth_time");
-                    //options.ClaimActions.MapUniqueJsonKey("role", "role");
+                    options.ClaimActions.MapUniqueJsonKey("role", "role");
 
-                    //options.Scope.Add("movieAPI");
+                    options.Scope.Add("movieAPI");
 
                     options.SaveTokens = true;
                     options.GetClaimsFromUserInfoEndpoint = true;
 
-                    //options.TokenValidationParameters = new TokenValidationParameters
-                    //{
-                    //    NameClaimType = JwtClaimTypes.GivenName,
-                    //    RoleClaimType = JwtClaimTypes.Role
-                    //};
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        NameClaimType = JwtClaimTypes.GivenName,
+                        RoleClaimType = JwtClaimTypes.Role
+                    };
                 });
 
             // http operations
