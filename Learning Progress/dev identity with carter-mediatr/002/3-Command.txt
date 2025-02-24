@@ -1,0 +1,30 @@
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using BuildingBlock.Models;
+using MediatR;
+using Newtonsoft.Json;
+
+public class GetMoviesQuery : IRequest<IEnumerable<Movie>> { }
+
+public class GetMoviesQueryHandler : IRequestHandler<GetMoviesQuery, IEnumerable<Movie>>
+{
+    private readonly IHttpClientFactory _httpClientFactory;
+
+    public GetMoviesQueryHandler(IHttpClientFactory httpClientFactory)
+    {
+        _httpClientFactory = httpClientFactory;
+    }
+
+    public async Task<IEnumerable<Movie>> Handle(GetMoviesQuery request, CancellationToken cancellationToken)
+    {
+        var httpClient = _httpClientFactory.CreateClient("MovieAPIClient");
+
+        var response = await httpClient.GetAsync("/api/movies", cancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync();
+        return JsonConvert.DeserializeObject<List<Movie>>(content);
+    }
+}

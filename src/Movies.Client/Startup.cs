@@ -1,4 +1,5 @@
 ﻿using System;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
@@ -77,6 +78,23 @@ namespace Movies.Client
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
             }).AddHttpMessageHandler<AuthenticationDelegatingHandler>();
+
+            // 2 create an HttpClient used for accessing the IDP
+            services.AddHttpClient("IDPClient", client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:5005/");
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+            });
+
+
+            services.AddSingleton(new ClientCredentialsTokenRequest
+            {
+                Address = "https://localhost:5005/connect/token",
+                ClientId = "movieClient",
+                ClientSecret = "secret",
+                Scope = "movieAPI"
+            });
 
 
 
