@@ -1,0 +1,26 @@
+using Carter;
+using MediatR;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Đăng ký Carter
+builder.Services.AddCarter();
+
+// Đăng ký MediatR và lấy tất cả các Handler trong Assembly
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
+// Đăng ký IHttpClientFactory
+builder.Services.AddHttpClient("MovieAPIClient", client =>
+{
+    client.BaseAddress = new Uri("https://your-movie-api.com"); // Thay URL API thực tế
+});
+
+var app = builder.Build();
+
+// Sử dụng Carter
+app.MapCarter();
+
+app.Run();

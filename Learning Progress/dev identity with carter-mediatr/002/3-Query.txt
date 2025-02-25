@@ -1,0 +1,38 @@
+using System.Net.Http;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using BuildingBlock.Models;
+using MediatR;
+using Newtonsoft.Json;
+
+public class CreateMovieCommand : IRequest<Movie>
+{
+    public string Title { get; set; }
+    public string Genre { get; set; }
+    public int Year { get; set; }
+}
+
+public class CreateMovieCommandHandler : IRequestHandler<CreateMovieCommand, Movie>
+{
+    private readonly IHttpClientFactory _httpClientFactory;
+
+    public CreateMovieCommandHandler(IHttpClientFactory httpClientFactory)
+    {
+        _httpClientFactory = httpClientFactory;
+    }
+
+    public async Task<Movie> Handle(CreateMovieCommand request, CancellationToken cancellationToken)
+    {
+        var httpClient = _httpClientFactory.CreateClient("MovieAPIClient");
+
+        var newMovie = new Movie { Title = request.Title, Genre = request.Genre, Year = request.Year };
+        var content = new StringContent(JsonConvert.SerializeObject(newMovie), Encoding.UTF8, "application/json");
+
+        var response = await httpClient.PostAsync("/api/movies", content, cancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        var responseData = await response.Content.ReadAsStringAsync();
+        return JsonConvert.DeserializeObject<Movie>(responseData);
+    }
+}

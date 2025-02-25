@@ -18,4 +18,9 @@ jwt.io
 
 https://jsonformatter.org/
 
+https://github.com/vasimsunni/SecureMicroserviceWithIdentityServer4
 
+https://github.com/zahidcakici/eShopOnContainers
+
+https://github.com/dotnet-architecture/eShopOnContainers/wiki/eBooks
+https://github.com/zahidcakici/Securing-Microservices-with-IdentityServer4?tab=readme-ov-file
